@@ -84,15 +84,15 @@ function CollectionCreateForm({
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item name="start-date" label="Start Date" {...timeConfig}>
+        <Form.Item name="startDate" label="Start Date" {...timeConfig}>
           <DatePicker />
         </Form.Item>
         
-        <Form.Item name="end-date" label="End Date" {...timeConfig}>
+        <Form.Item name="endDate" label="End Date" {...timeConfig}>
           <DatePicker />
         </Form.Item>
 
-        <Form.Item name="date-range" label="Date Range" {...rangeConfig}>
+        <Form.Item name="dateRange" label="Date Range" {...rangeConfig}>
           <RangePicker showTime />
         </Form.Item>
       </Form>
@@ -109,7 +109,10 @@ export default function CollectionsPage() {
       ...values,
       startDate: startDate.utc().format(),
       endDate: endDate?.utc().format(),
-      dateRange: [dateRange[0]?.utc().format(), dateRange[1]?.utc().format()]
+      dateRange: [
+        dateRange[0]?.utc().format(), 
+        dateRange[1]?.utc().format()
+      ]
     }
     console.log('Formatted values: ', data)
     setVisible(false);
