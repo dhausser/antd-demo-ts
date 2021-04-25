@@ -1,13 +1,100 @@
-import React from 'react';
-import { Button } from 'antd';
-import './App.less';
+import React, { useState } from 'react';
+import { Button, Modal, Form, Input, Radio } from 'antd';
+import DatePicker from './components/DatePicker'
+import './App.less'
 
-function App() {
-  return (
-    <div className="App">
-      <Button type="primary">Button</Button>
-    </div>
-  );
+interface Values {
+  title: string;
+  description: string;
+  modifier: string;
 }
 
-export default App;
+interface CollectionCreateFormProps {
+  visible: boolean;
+  onCreate: (values: Values) => void;
+  onCancel: () => void;
+}
+
+const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
+  visible,
+  onCreate,
+  onCancel,
+}) => {
+  const [form] = Form.useForm();
+  return (
+    <Modal
+      visible={visible}
+      title="Create a new collection"
+      okText="Create"
+      cancelText="Cancel"
+      onCancel={onCancel}
+      onOk={() => {
+        form
+          .validateFields()
+          .then(values => {
+            form.resetFields();
+            onCreate(values);
+          })
+          .catch(info => {
+            console.log('Validate Failed:', info);
+          });
+      }}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        name="form_in_modal"
+        initialValues={{ modifier: 'public' }}
+      >
+        <Form.Item
+          name="title"
+          label="Title"
+          rules={[{ required: true, message: 'Please input the title of collection!' }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item name="description" label="Description">
+          <Input type="textarea" />
+        </Form.Item>
+        <Form.Item name="modifier" className="collection-create-form_last-form-item">
+          <Radio.Group>
+            <Radio value="public">Public</Radio>
+            <Radio value="private">Private</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item name="startDate" label="Start Date" rules={[{ required: true, message: "Please pick a start date!" }]}>
+          <DatePicker />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+export default function CollectionsPage() {
+  const [visible, setVisible] = useState(false);
+
+  const onCreate = (values: any) => {
+    console.log('Received values of form: ', values);
+    setVisible(false);
+  };
+
+  return (
+    <div style={{ width: 400, margin: '100px auto' }}>
+      <Button
+        type="primary"
+        onClick={() => {
+          setVisible(true);
+        }}
+      >
+        New Collection
+      </Button>
+      <CollectionCreateForm
+        visible={visible}
+        onCreate={onCreate}
+        onCancel={() => {
+          setVisible(false);
+        }}
+      />
+    </div>
+  );
+};
