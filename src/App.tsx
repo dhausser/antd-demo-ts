@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input, Radio } from 'antd';
-import DatePicker from './components/DatePicker'
+import dayjs, { Dayjs } from 'dayjs';
+import utc from 'dayjs/plugin/utc'
+import { DatePicker } from './components'
 import './App.less'
+
+dayjs.extend(utc)
 
 interface Values {
   title: string;
   description: string;
   modifier: string;
+  dateRange: Dayjs[];
 }
 
 interface CollectionCreateFormProps {
@@ -15,11 +20,23 @@ interface CollectionCreateFormProps {
   onCancel: () => void;
 }
 
-const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
+const { RangePicker } = DatePicker;
+
+const inputConfig = { rules: [{ required: true, message: 'Please input a title!' }] }
+
+const timeConfig = {
+  rules: [{ type: 'object' as const, required: true, message: 'Please select time!' }],
+};
+
+const rangeConfig = {
+  rules: [{ type: 'array' as const, required: true, message: 'Please select time!' }],
+};
+
+function CollectionCreateForm({
   visible,
   onCreate,
   onCancel,
-}) => {
+}: CollectionCreateFormProps) {
   const [form] = Form.useForm();
   return (
     <Modal
@@ -49,21 +66,32 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         <Form.Item
           name="title"
           label="Title"
-          rules={[{ required: true, message: 'Please input the title of collection!' }]}
+          {...inputConfig}
         >
           <Input />
         </Form.Item>
+
         <Form.Item name="description" label="Description">
           <Input type="textarea" />
         </Form.Item>
+
         <Form.Item name="modifier" className="collection-create-form_last-form-item">
           <Radio.Group>
             <Radio value="public">Public</Radio>
             <Radio value="private">Private</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item name="startDate" label="Start Date" rules={[{ required: true, message: "Please pick a start date!" }]}>
+
+        <Form.Item name="startDate" label="Start Date" {...timeConfig}>
           <DatePicker />
+        </Form.Item>
+        
+        <Form.Item name="endDate" label="End Date" {...timeConfig}>
+          <DatePicker />
+        </Form.Item>
+
+        <Form.Item name="dateRange" label="Date Range" {...rangeConfig}>
+          <RangePicker showTime />
         </Form.Item>
       </Form>
     </Modal>
@@ -73,13 +101,20 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
 export default function CollectionsPage() {
   const [visible, setVisible] = useState(false);
 
-  const onCreate = (values: any) => {
+  const onCreate = (values: Values) => {
     console.log('Received values of form: ', values);
+    const [startDate, endDate] = values.dateRange
+    const data = { 
+      ...values,
+      startDate: startDate.utc().format(),
+      endDate: endDate?.utc().format()
+    }
+    console.log(data)
     setVisible(false);
   };
 
   return (
-    <div style={{ width: 400, margin: '100px auto' }}>
+    <div className="container">
       <Button
         type="primary"
         onClick={() => {
