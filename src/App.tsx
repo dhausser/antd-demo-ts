@@ -11,6 +11,8 @@ interface Values {
   title: string;
   description: string;
   modifier: string;
+  startDate: Dayjs;
+  endDate: Dayjs;
   dateRange: Dayjs[];
 }
 
@@ -82,15 +84,15 @@ function CollectionCreateForm({
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item name="startDate" label="Start Date" {...timeConfig}>
+        <Form.Item name="start-date" label="Start Date" {...timeConfig}>
           <DatePicker />
         </Form.Item>
         
-        <Form.Item name="endDate" label="End Date" {...timeConfig}>
+        <Form.Item name="end-date" label="End Date" {...timeConfig}>
           <DatePicker />
         </Form.Item>
 
-        <Form.Item name="dateRange" label="Date Range" {...rangeConfig}>
+        <Form.Item name="date-range" label="Date Range" {...rangeConfig}>
           <RangePicker showTime />
         </Form.Item>
       </Form>
@@ -102,14 +104,14 @@ export default function CollectionsPage() {
   const [visible, setVisible] = useState(false);
 
   const onCreate = (values: Values) => {
-    console.log('Received values of form: ', values);
-    const [startDate, endDate] = values.dateRange
+    const { startDate, endDate, dateRange } = values
     const data = { 
       ...values,
       startDate: startDate.utc().format(),
-      endDate: endDate?.utc().format()
+      endDate: endDate?.utc().format(),
+      dateRange: [dateRange[0]?.utc().format(), dateRange[1]?.utc().format()]
     }
-    console.log(data)
+    console.log('Formatted values: ', data)
     setVisible(false);
   };
 
