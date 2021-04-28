@@ -1,20 +1,22 @@
-import React from 'react'
-import { DatePicker as AntdDatePicker } from 'antd'
-import moment, { Moment } from 'moment-timezone'
+import React from "react";
+import { DatePicker as AntdDatePicker } from "antd";
+import moment, { Moment } from "moment-timezone";
 
 interface Props {
-  value: string
-  record: any
+  value: string;
+  record: any;
 }
 
 function DatePicker({ value, record }: Props) {
-  const warsaw = moment.tz(value, "Europe/Warsaw")
-  
-  const handleChange = (date: Moment | null, _dateString: string) => {
-    record.date = date?.utc().format()
-  }
+  const warsaw = moment.tz(value, "Europe/Warsaw");
 
-  return <AntdDatePicker showTime value={warsaw} onChange={handleChange} />
+  const handleChange = (date: Moment | null, dateString: string) => {
+    const newDate = date?.utc().format();
+    console.log({ dateString, newDate });
+    record.date = newDate;
+  };
+
+  return <AntdDatePicker showTime value={warsaw} onChange={handleChange} />;
 }
 
-export default DatePicker
+export default DatePicker;
