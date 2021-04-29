@@ -23,7 +23,7 @@ interface CollectionCreateFormProps {
   onCancel: () => void;
 }
 
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 
 const inputConfig = { rules: [{ required: true, message: 'Please input a title!' }] }
 
@@ -31,15 +31,11 @@ const timeConfig = {
   rules: [{ type: 'object' as const, required: true, message: 'Please select time!' }],
 };
 
-const rangeConfig = {
-  rules: [{ type: 'array' as const, required: true, message: 'Please select time!' }],
-};
+// const rangeConfig = {
+//   rules: [{ type: 'array' as const, required: true, message: 'Please select time!' }],
+// };
 
-const record = {
-  date: ""
-}
-
-function CollectionCreateForm({
+export function CollectionCreateForm({
   visible,
   onCreate,
   onCancel,
@@ -102,7 +98,7 @@ function CollectionCreateForm({
         </Form.Item> */}
 
         <Form.Item name="localDate" label="Local Range" {...timeConfig}>
-          <CustomPicker value="2014-06-01 12:00" record={record} />
+          <CustomPicker value="2014-06-01 12:00" />
         </Form.Item>
       </Form>
     </Modal>

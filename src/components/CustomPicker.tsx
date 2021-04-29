@@ -4,16 +4,14 @@ import moment, { Moment } from "moment-timezone";
 
 interface Props {
   value: string;
-  record: any;
 }
 
-function DatePicker({ value, record }: Props) {
+function DatePicker({ value }: Props) {
   const warsaw = moment.tz(value, "Europe/Warsaw");
 
   const handleChange = (date: Moment | null, dateString: string) => {
     const newDate = date?.utc().format();
     console.log({ dateString, newDate });
-    record.date = newDate;
   };
 
   return <AntdDatePicker showTime value={warsaw} onChange={handleChange} />;
