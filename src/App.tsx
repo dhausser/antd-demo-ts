@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Form, Input, Radio } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc'
-import { DatePicker, CustomPicker } from './components'
-import moment from 'moment-timezone'
+import { DatePicker } from './components'
 import './App.less'
 
 dayjs.extend(utc)
@@ -23,7 +22,7 @@ interface CollectionCreateFormProps {
   onCancel: () => void;
 }
 
-// const { RangePicker } = DatePicker;
+const { RangePicker } = DatePicker;
 
 const inputConfig = { rules: [{ required: true, message: 'Please input a title!' }] }
 
@@ -31,9 +30,9 @@ const timeConfig = {
   rules: [{ type: 'object' as const, required: true, message: 'Please select time!' }],
 };
 
-// const rangeConfig = {
-//   rules: [{ type: 'array' as const, required: true, message: 'Please select time!' }],
-// };
+const rangeConfig = {
+  rules: [{ type: 'array' as const, required: true, message: 'Please select time!' }],
+};
 
 export function CollectionCreateForm({
   visible,
@@ -85,7 +84,7 @@ export function CollectionCreateForm({
           </Radio.Group>
         </Form.Item>
 
-        {/* <Form.Item name="startDate" label="Start Date" {...timeConfig}>
+        <Form.Item name="startDate" label="Start Date" {...timeConfig}>
           <DatePicker />
         </Form.Item>
         
@@ -95,10 +94,6 @@ export function CollectionCreateForm({
 
         <Form.Item name="dateRange" label="Date Range" {...rangeConfig}>
           <RangePicker showTime />
-        </Form.Item> */}
-
-        <Form.Item name="localDate" label="Local Range" {...timeConfig}>
-          <CustomPicker value="2014-06-01 12:00" />
         </Form.Item>
       </Form>
     </Modal>
